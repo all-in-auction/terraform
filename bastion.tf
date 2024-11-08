@@ -1,9 +1,9 @@
 resource "aws_instance" "bastion" {
   ami           = "ami-02c329a4b4aba6a48"
   instance_type = "t2.micro"
-  subnet_id       = aws_subnet.public[0].id
-  key_name        = "gogo123"
-  security_groups = [aws_security_group.bastion_sg.name]
+  subnet_id     = aws_subnet.public[0].id
+  key_name      = "gogo123"
+  vpc_security_group_ids = [aws_security_group.bastion_sg.id]
 
   user_data = <<-EOF
               #!/bin/bash

@@ -1,6 +1,7 @@
 resource "aws_instance" "rabbitmq-instance" {
   ami           = "ami-02c329a4b4aba6a48"
   instance_type = "t2.micro"
+  key_name      = "gogo123"
 
   user_data = <<-EOF
             #!/bin/bash
@@ -99,20 +100,20 @@ resource "aws_security_group" "rabbitmq_sg" {
   }
 }
 
-resource "aws_security_group_rule" "allow_rabbitmq_to_ecs" {
+resource "aws_security_group_rule" "allow_ecs_to_rabbitmq" {
   type              = "ingress"
   from_port         = 5672
   to_port           = 5672
   protocol          = "tcp"
-  security_group_id = aws_security_group.ecs_tasks.id
-  source_security_group_id = aws_security_group.rabbitmq_sg.id
+  security_group_id = aws_security_group.rabbitmq_sg.id 
+  source_security_group_id = aws_security_group.ecs_tasks.id
 }
 
-resource "aws_security_group_rule" "allow_rabbitmq_to_bastion" {
-  type              = "ingress"
-  from_port         = 22
-  to_port           = 22
-  protocol          = "tcp"
-  security_group_id = aws_security_group.bastion_sg.id
-  source_security_group_id = aws_security_group.rabbitmq_sg.id
+resource "aws_security_group_rule" "allow_bastion_to_rabbitmq" {
+  type                     = "ingress"
+  from_port                = 22
+  to_port                  = 22
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.rabbitmq_sg.id 
+  source_security_group_id = aws_security_group.bastion_sg.id    
 }

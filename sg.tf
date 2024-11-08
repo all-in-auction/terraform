@@ -38,20 +38,20 @@ resource "aws_security_group" "ecs_tasks" {
   }
 }
 
-resource "aws_security_group_rule" "allow_ecs_to_redis" {
+resource "aws_security_group_rule" "allow_redis_to_ecs" {
   type              = "ingress"
   from_port         = 6379
   to_port           = 6379
   protocol          = "tcp"
-  security_group_id = aws_security_group.redis_sg.id
-  source_security_group_id = aws_security_group.ecs_tasks.id
+  security_group_id = aws_security_group.ecs_tasks.id
+  source_security_group_id = aws_security_group.redis_sg.id
 }
 
-resource "aws_security_group_rule" "allow_ecs_to_rabbitmq" {
+resource "aws_security_group_rule" "allow_rabbitmq_to_ecs" {
   type              = "ingress"
   from_port         = 5672
   to_port           = 5672
   protocol          = "tcp"
-  security_group_id = aws_security_group.rabbitmq_sg.id
-  source_security_group_id = aws_security_group.ecs_tasks.id
+  security_group_id = aws_security_group.ecs_tasks.id
+  source_security_group_id = aws_security_group.rabbitmq_sg.id
 }
