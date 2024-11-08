@@ -1,0 +1,57 @@
+resource "aws_security_group" "lb" {
+  vpc_id = aws_vpc.cluster_vpc.id
+  name = "lb-sg-${var.env_suffix}"
+
+  ingress {
+    from_port         = 80
+    protocol          = "tcp"
+    to_port           = 80
+    cidr_blocks       = ["0.0.0.0/0"]
+    ipv6_cidr_blocks  = ["::/0"]
+  }
+
+  egress {
+    from_port = 0
+    protocol  = "-1"
+    to_port   = 0
+    cidr_blocks = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+}
+
+resource "aws_security_group" "ecs_tasks" {
+  vpc_id = aws_vpc.cluster_vpc.id
+  name = "ecs-tasks-sg-${var.env_suffix}"
+
+  ingress {
+    from_port       = 8080
+    protocol        = "tcp"
+    to_port         = 8080
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port     = 0
+    protocol      = "-1"
+    to_port       = 0
+    cidr_blocks   = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group_rule" "allow_ecs_to_redis" {
+  type              = "ingress"
+  from_port         = 6379
+  to_port           = 6379
+  protocol          = "tcp"
+  security_group_id = aws_security_group.redis_sg.id
+  source_security_group_id = aws_security_group.ecs_tasks.id
+}
+
+resource "aws_security_group_rule" "allow_ecs_to_rabbitmq" {
+  type              = "ingress"
+  from_port         = 5672
+  to_port           = 5672
+  protocol          = "tcp"
+  security_group_id = aws_security_group.rabbitmq_sg.id
+  source_security_group_id = aws_security_group.ecs_tasks.id
+}
