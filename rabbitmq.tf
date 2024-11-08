@@ -11,7 +11,7 @@ resource "aws_instance" "rabbitmq-instance" {
             sudo service docker start
             sudo systemctl enable docker
 
-            cat <<EOT >> rabbitmq-compose.yml
+            cat <<'EOT' >> rabbitmq-compose.yml
             services:
               rabbitmq1:
                 image: countrym/rabbitmq-delayed-queue-ubuntu:latest
@@ -105,5 +105,14 @@ resource "aws_security_group_rule" "allow_rabbitmq_to_ecs" {
   to_port           = 5672
   protocol          = "tcp"
   security_group_id = aws_security_group.ecs_tasks.id
+  source_security_group_id = aws_security_group.rabbitmq_sg.id
+}
+
+resource "aws_security_group_rule" "allow_rabbitmq_to_bastion" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  security_group_id = aws_security_group.bastion_sg.id
   source_security_group_id = aws_security_group.rabbitmq_sg.id
 }
