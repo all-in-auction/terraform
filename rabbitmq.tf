@@ -1,7 +1,7 @@
 resource "aws_instance" "rabbitmq-instance" {
   ami           = "ami-02c329a4b4aba6a48"
   instance_type = "t2.micro"
-  key_name      = "gogo123"
+  key_name      = "auction_key"
 
   user_data = <<-EOF
             #!/bin/bash

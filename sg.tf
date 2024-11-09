@@ -55,3 +55,21 @@ resource "aws_security_group_rule" "allow_rabbitmq_to_ecs" {
   security_group_id = aws_security_group.ecs_tasks.id
   source_security_group_id = aws_security_group.rabbitmq_sg.id
 }
+
+resource "aws_security_group_rule" "allow_mysql_to_ecs" {
+  type              = "ingress"
+  from_port         = 3306
+  to_port           = 3306
+  protocol          = "tcp"
+  security_group_id = aws_security_group.ecs_tasks.id
+  source_security_group_id = aws_security_group.mysql_sg.id
+}
+
+resource "aws_security_group_rule" "allow_mysql_to_ecs2" {
+  type              = "ingress"
+  from_port         = 3307
+  to_port           = 3307
+  protocol          = "tcp"
+  security_group_id = aws_security_group.ecs_tasks.id
+  source_security_group_id = aws_security_group.mysql_sg.id
+}
