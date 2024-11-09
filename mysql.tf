@@ -3,6 +3,56 @@ resource "aws_instance" "mysql-instance" {
   instance_type = "t3.small"
   key_name      = "auction_key"
 
+  user_data = <<-EOF
+            #!/bin/bash
+            sudo yum update -y
+            sudo yum install -y docker
+            sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+            sudo service docker start
+            sudo systemctl enable docker
+            sudo yum install -y libxcrypt-compat
+
+            cat <<'EOT' >> docker-compose.yml
+            version: '3.1'
+            services:
+              mysql-master:
+                image: mysql:8.0
+                container_name: mysql-master
+                environment:
+                  - MYSQL_ROOT_PASSWORD=1234
+                ports:
+                  - "3306:3306"
+                command:
+                  - "--server-id=1"
+                  - "--log-bin=mysql-bin"
+                volumes:
+                  - master-data:/var/lib/mysql
+
+              mysql-slave:
+                image: mysql:8.0
+                container_name: mysql-slave
+                environment:
+                  - MYSQL_ROOT_PASSWORD=1234
+                ports:
+                  - "3307:3306"
+                command:
+                  - "--server-id=2"
+                  - "--log-bin=mysql-bin"
+                  - "--replicate-do-db=auction_test"
+                volumes:
+                  - slave-data:/var/lib/mysql
+                depends_on:
+                  - mysql-master
+
+            volumes:
+              master-data:
+              slave-data:
+            EOT
+
+            sudo docker-compose up -d
+            EOF
+
   tags = {
     Name = "mysql-instance"
   }

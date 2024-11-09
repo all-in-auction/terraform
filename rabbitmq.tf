@@ -11,6 +11,7 @@ resource "aws_instance" "rabbitmq-instance" {
             sudo chmod +x /usr/local/bin/docker-compose
             sudo service docker start
             sudo systemctl enable docker
+            sudo yum install -y libxcrypt-compat
 
             cat <<'EOT' >> rabbitmq-compose.yml
             services:
@@ -76,6 +77,7 @@ resource "aws_instance" "rabbitmq-instance" {
               rabbitmq3-data:
             EOT
 
+            sudo docker network create rabbitmq
             sudo docker-compose -f rabbitmq-compose.yml up -d
             EOF
 
