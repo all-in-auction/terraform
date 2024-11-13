@@ -81,6 +81,15 @@ resource "aws_security_group_rule" "allow_private_to_nat_instance" {
   cidr_blocks       = aws_subnet.private[*].cidr_block
 }
 
+resource "aws_security_group_rule" "allow_tcp_to_nat_instance" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  security_group_id = aws_security_group.nat_instance_sg.id 
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
 resource "aws_eip" "nat_eip" {
   instance = aws_instance.nat_instance.id
 }

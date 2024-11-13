@@ -1,6 +1,7 @@
 resource "aws_instance" "redis-instance" {
   ami           = "ami-02c329a4b4aba6a48"
   instance_type = "t2.micro"
+  key_name      = "auction_key"
 
   user_data = <<-EOF
               #!/bin/bash
@@ -49,4 +50,13 @@ resource "aws_security_group_rule" "allow_bastion_to_redis" {
   protocol                 = "tcp"
   security_group_id        = aws_security_group.redis_sg.id 
   source_security_group_id = aws_security_group.bastion_sg.id    
+}
+
+resource "aws_security_group_rule" "allow_nat_to_redis" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  security_group_id        = aws_security_group.redis_sg.id 
+  source_security_group_id = aws_security_group.nat_instance_sg.id    
 }
