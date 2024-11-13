@@ -46,29 +46,51 @@ resource "aws_route" "internet_access" {
   gateway_id              = aws_internet_gateway.cluster_igw.id
 }
 
-resource "aws_nat_gateway" "nat_gateway" {
-  count         = var.az_count
-  subnet_id     = element(aws_subnet.public.*.id, count.index)
-  allocation_id = element(aws_eip.nat_gateway.*.id, count.index)
+resource "aws_instance" "nat_instance" {
+  ami           = "ami-0e0ce674db551c1a5"
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.public[0].id
+  associate_public_ip_address = true
+  key_name      = "auction_key"
 
   tags = {
-    Name = "NAT gw ${var.env_suffix}"
+    Name = "nat-instance-${var.env_suffix}"
+  }
+
+  vpc_security_group_ids = [aws_security_group.nat_instance_sg.id]
+}
+
+resource "aws_security_group" "nat_instance_sg" {
+  name        = "nat-instance-sg"
+  vpc_id      = aws_vpc.cluster_vpc.id
+
+  egress {
+    from_port     = 0
+    to_port       = 0
+    protocol      = "-1"
+    cidr_blocks   = ["0.0.0.0/0"]
   }
 }
 
-resource "aws_eip" "nat_gateway" {
-  count       = var.az_count
-  vpc         = true
-  depends_on  = [aws_internet_gateway.cluster_igw]
+resource "aws_security_group_rule" "allow_private_to_nat_instance" {
+  type              = "ingress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  security_group_id = aws_security_group.nat_instance_sg.id 
+  cidr_blocks       = aws_subnet.private[*].cidr_block
+}
+
+resource "aws_eip" "nat_eip" {
+  instance = aws_instance.nat_instance.id
 }
 
 resource "aws_route_table" "private_route" {
-  count  = var.az_count
   vpc_id = aws_vpc.cluster_vpc.id
 
   route {
-    cidr_block      = "0.0.0.0/0"
-    nat_gateway_id  = element(aws_nat_gateway.nat_gateway.*.id, count.index)
+    cidr_block     = "0.0.0.0/0"
+    instance_id    = aws_instance.nat_instance.id
   }
 
   tags = {

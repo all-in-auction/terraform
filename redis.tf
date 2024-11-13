@@ -41,3 +41,12 @@ resource "aws_security_group_rule" "allow_ecs_to_redis" {
   security_group_id = aws_security_group.redis_sg.id
   source_security_group_id = aws_security_group.ecs_tasks.id
 }
+
+resource "aws_security_group_rule" "allow_bastion_to_redis" {
+  type                     = "ingress"
+  from_port                = 22
+  to_port                  = 22
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.redis_sg.id 
+  source_security_group_id = aws_security_group.bastion_sg.id    
+}
