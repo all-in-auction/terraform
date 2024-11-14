@@ -108,3 +108,12 @@ resource "aws_security_group_rule" "allow_nat_to_mysql" {
   security_group_id        = aws_security_group.mysql_sg.id 
   source_security_group_id = aws_security_group.nat_instance_sg.id    
 }
+
+resource "aws_security_group_rule" "allow_batch_to_mysql" {
+  type                     = "ingress"
+  from_port                = 3306
+  to_port                  = 3306
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.mysql_sg.id 
+  source_security_group_id = aws_security_group.batch_sg.id    
+}

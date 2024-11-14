@@ -5,7 +5,7 @@ def lambda_handler(event, context):
     ec2 = boto3.client('ec2')
     
     action = event.get("action")
-    instance_ids = ["i-0896d591eec603007", "i-0d400e4c490f86acd", "i-0da5732e6f8b8d497"] #redis, mysql, rabbitmq
+    instance_ids = [] #ec2 instance id
     
     if action == "stop":
         ec2.stop_instances(InstanceIds=instance_ids)
