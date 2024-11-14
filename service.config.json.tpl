@@ -23,7 +23,10 @@
       {
         "name": "PORT",
         "value": "${host_port}"
-      }
+      },
+      { "name": "AWS_REGION", "value": "${aws_region}" },
+      { "name": "ENV_SUFFIX", "value": "${env_suffix}" },
+      { "name": "APP_NAME", "value": "${app_name}" }
     ],
     "ulimits": [
       {
