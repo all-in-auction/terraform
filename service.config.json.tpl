@@ -24,7 +24,6 @@
         "name": "PORT",
         "value": "${host_port}"
       },
-
     ],
     "ulimits": [
       {
