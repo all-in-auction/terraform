@@ -52,6 +52,7 @@ resource "aws_instance" "nat_instance" {
   subnet_id     = aws_subnet.public[0].id
   associate_public_ip_address = true
   key_name      = "auction_key"
+  source_dest_check      = false
 
   tags = {
     Name = "nat-instance-${var.env_suffix}"
