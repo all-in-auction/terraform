@@ -70,7 +70,7 @@
       },
       {
         "name": "KAFKA_HOST",
-        "value": "${kafka_host}:9092"
+        "value": "${kafka_host}"
       },
       {
         "name": "MASTER_DB_URL",
@@ -103,6 +103,10 @@
       {
         "name": "SPRING_PROFILES_ACTIVE",
         "value": "prod"
+      },
+      {
+        "name": "KAFKA_HOSTS",
+        "value": "${kafka_host}:19092, ${kafka_host}:19093, ${kafka_host}:19094"
       }
     ],
     "ulimits": [
