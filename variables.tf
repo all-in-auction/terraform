@@ -46,6 +46,11 @@ variable "tpl_path" {
   default = "service.config.json.tpl"
 }
 
+variable "tpl_path2" {
+  type = string
+  default = "service-point.config.json.tpl"
+}
+
 variable "account_id" {
   type = string
 }
@@ -53,4 +58,28 @@ variable "account_id" {
 variable "elb_account_id" {
   type = string
   default = "600734575887"
+}
+
+variable "aws_access_key_id" {
+  type = string
+}
+
+variable "aws_secret_access_key" {
+  type = string
+}
+
+variable "jwt_secret_key" {
+  type = string
+}
+
+variable "redis_password" {
+  type = string
+}
+
+variable "payment_client_key" {
+  type = string
+}
+
+variable "payment_secret_key" {
+  type = string
 }

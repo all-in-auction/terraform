@@ -34,11 +34,23 @@ data "template_file" "service" {
     host_port          = 8080
     app_name           = var.app_name
     env_suffix         = var.env_suffix
+    aws_access_key_id  = var.aws_access_key_id
+    aws_secret_access_key = var.aws_secret_access_key
+    jwt_secret_key     = var.jwt_secret_key
+    rabbitmq_host      = aws_instance.rabbitmq-instance.private_ip
+    redis_host         = aws_instance.redis-instance.private_ip
+    redis_password     = var.redis_password
+    payment_client_key = var.payment_client_key
+    payment_secret_key = var.payment_secret_key
+    logstash_host      = "123.123.123.1234"
+    kafka_host         = "123.123.123.1234"
+    mysql_host         = aws_instance.mysql-instance.private_ip
+    elasticsearch_host = "123.123.123.1234"
   }
 }
 
 data "template_file" "service_point" {
-  template = file(var.tpl_path)
+  template = file(var.tpl_path2)
 
   vars = {
     region             = var.region

@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "auction_bucket" {
-  bucket      = "auction-bucket"
+  bucket      = "all-in-auction-bucket"
   acl         = "private"
 }
 
