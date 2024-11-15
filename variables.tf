@@ -76,6 +76,14 @@ variable "redis_password" {
   type = string
 }
 
+variable "elasticsearch_username" {
+  type = string
+}
+
+variable "elasticsearch_password" {
+  type = string
+}
+
 variable "payment_client_key" {
   type = string
 }

@@ -46,6 +46,8 @@ data "template_file" "service" {
     kafka_host         = aws_instance.kafka-instance.private_ip
     mysql_host         = aws_instance.mysql-instance.private_ip
     elasticsearch_host = aws_instance.monitoring-instance.private_ip
+    elasticsearch_username = var.elasticsearch_username
+    elasticsearch_password = var.elasticsearch_password
   }
 }
 

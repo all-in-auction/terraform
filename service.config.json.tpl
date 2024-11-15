@@ -90,7 +90,15 @@
       },
       {
         "name": "ELASTICSEARCH_URIS",
-        "value": "${elasticsearch_host}"
+        "value": "${elasticsearch_host}:9200"
+      },
+      {
+        "name": "ELASTICSEARCH_USERNAME",
+        "value": "${elasticsearch_username}"
+      },
+      {
+        "name": "ELASTICSEARCH_PASSWORD",
+        "value": "${elasticsearch_password}"
       },
       {
         "name": "SPRING_PROFILES_ACTIVE",
