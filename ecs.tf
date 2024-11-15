@@ -43,7 +43,7 @@ data "template_file" "service" {
     payment_client_key = var.payment_client_key
     payment_secret_key = var.payment_secret_key
     logstash_host      = "123.123.123.1234"
-    kafka_host         = "123.123.123.1234"
+    kafka_host         = aws_instance.kafka-instance.private_ip
     mysql_host         = aws_instance.mysql-instance.private_ip
     elasticsearch_host = "123.123.123.1234"
   }

@@ -70,7 +70,7 @@
       },
       {
         "name": "KAFKA_HOST",
-        "value": "${kafka_host}"
+        "value": "${kafka_host}:9092"
       },
       {
         "name": "MASTER_DB_URL",

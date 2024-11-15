@@ -73,3 +73,12 @@ resource "aws_security_group_rule" "allow_mysql_to_ecs2" {
   security_group_id = aws_security_group.ecs_tasks.id
   source_security_group_id = aws_security_group.mysql_sg.id
 }
+
+resource "aws_security_group_rule" "allow_kafka_to_ecs" {
+  type              = "ingress"
+  from_port         = 9092
+  to_port           = 9092
+  protocol          = "tcp"
+  security_group_id = aws_security_group.ecs_tasks.id
+  source_security_group_id = aws_security_group.kafka_sg.id
+}
