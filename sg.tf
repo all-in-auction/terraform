@@ -82,3 +82,21 @@ resource "aws_security_group_rule" "allow_kafka_to_ecs" {
   security_group_id = aws_security_group.ecs_tasks.id
   source_security_group_id = aws_security_group.kafka_sg.id
 }
+
+resource "aws_security_group_rule" "allow_monitoring_logstash_to_ecs" {
+  type              = "ingress"
+  from_port         = 5044
+  to_port           = 5044
+  protocol          = "tcp"
+  security_group_id = aws_security_group.ecs_tasks.id
+  source_security_group_id = aws_security_group.monitoring_sg.id
+}
+
+resource "aws_security_group_rule" "allow_monitoring_es_to_ecs" {
+  type              = "ingress"
+  from_port         = 9200
+  to_port           = 9200
+  protocol          = "tcp"
+  security_group_id = aws_security_group.ecs_tasks.id
+  source_security_group_id = aws_security_group.monitoring_sg.id
+}
