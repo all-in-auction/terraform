@@ -90,7 +90,7 @@
       },
       {
         "name": "ELASTICSEARCH_URIS",
-        "value": "${elasticsearch_host}:9200"
+        "value": "${elasticsearch_host}"
       },
       {
         "name": "SPRING_PROFILES_ACTIVE",
