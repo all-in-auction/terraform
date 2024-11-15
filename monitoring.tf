@@ -1,5 +1,5 @@
 resource "aws_instance" "monitoring-instance" {
-  ami           = "ami-02c329a4b4aba6a48"
+  ami           = "ami-040c33c6a51fd5d96"
   instance_type = "t3.small"
   key_name      = "auction_key"
 
