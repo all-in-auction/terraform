@@ -34,10 +34,28 @@ resource "aws_security_group" "kafka_sg" {
   }
 }
 
-resource "aws_security_group_rule" "allow_ecs_to_kafka" {
+resource "aws_security_group_rule" "allow_ecs_to_kafka1" {
   type              = "ingress"
-  from_port         = 9092
-  to_port           = 9092
+  from_port         = 19092
+  to_port           = 19092
+  protocol          = "tcp"
+  security_group_id = aws_security_group.kafka_sg.id 
+  source_security_group_id = aws_security_group.ecs_tasks.id
+}
+
+resource "aws_security_group_rule" "allow_ecs_to_kafka2" {
+  type              = "ingress"
+  from_port         = 19093
+  to_port           = 19093
+  protocol          = "tcp"
+  security_group_id = aws_security_group.kafka_sg.id 
+  source_security_group_id = aws_security_group.ecs_tasks.id
+}
+
+resource "aws_security_group_rule" "allow_ecs_to_kafka3" {
+  type              = "ingress"
+  from_port         = 19094
+  to_port           = 19094
   protocol          = "tcp"
   security_group_id = aws_security_group.kafka_sg.id 
   source_security_group_id = aws_security_group.ecs_tasks.id
