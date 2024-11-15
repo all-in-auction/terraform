@@ -91,6 +91,10 @@
       {
         "name": "ELASTICSEARCH_URIS",
         "value": "${elasticsearch_host}:9200"
+      },
+      {
+        "name": "SPRING_PROFILES_ACTIVE",
+        "value": "prod"
       }
     ],
     "ulimits": [
