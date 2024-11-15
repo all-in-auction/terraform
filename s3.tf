@@ -9,33 +9,24 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
+      # ECS 태스크 역할에 대한 접근 허용
       {
-        Effect = "Deny",
-        Principal = "*",
-        Action = "s3:*",
+        Effect = "Allow",
+        Principal = {
+          AWS = "arn:aws:iam::${var.account_id}:user/inseogpt"
+        },
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:ListBucket"
+        ],
         Resource = [
           "${aws_s3_bucket.auction_bucket.arn}",
           "${aws_s3_bucket.auction_bucket.arn}/*"
-        ],
-        Condition = {
-          StringNotEquals = {
-            "aws:sourceVpce" = aws_vpc_endpoint.s3_endpoint.id
-          }
-        }
+        ]
       }
     ]
   })
-}
-
-resource "aws_vpc_endpoint" "s3_endpoint" {
-  vpc_id            = aws_vpc.cluster_vpc.id
-  service_name      = "com.amazonaws.${var.region}.s3"
-  vpc_endpoint_type = "Gateway"
-  route_table_ids   = [aws_route_table.private_route.id]
-
-  tags = {
-    Name = "s3-vpc-endpoint"
-  }
 }
 
 resource "aws_iam_role_policy" "ecs_task_s3_access" {
@@ -49,7 +40,8 @@ resource "aws_iam_role_policy" "ecs_task_s3_access" {
         Action = [
           "s3:GetObject",
           "s3:PutObject",
-          "s3:ListBucket"
+          "s3:ListBucket",
+          "s3:GetBucketLocation"
         ],
         Resource = [
           "${aws_s3_bucket.auction_bucket.arn}",

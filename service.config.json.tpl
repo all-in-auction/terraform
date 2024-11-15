@@ -90,7 +90,7 @@
       },
       {
         "name": "ELASTICSEARCH_URIS",
-        "value": "${elasticsearch_host}:${elasticsearch_port}"
+        "value": "${elasticsearch_host}:9200"
       }
     ],
     "ulimits": [
