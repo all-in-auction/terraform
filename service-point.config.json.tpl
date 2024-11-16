@@ -43,6 +43,10 @@
       {
         "name": "SPRING_PROFILES_ACTIVE",
         "value": "prod"
+      },
+      {
+        "name": "EUREKA_HOST",
+        "value": "${eureka_host}"
       }
     ],
     "ulimits": [

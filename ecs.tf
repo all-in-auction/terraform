@@ -68,6 +68,7 @@ data "template_file" "service_point" {
     point_mysql_password = var.point_db_pw
     payment_client_key = var.payment_client_key
     payment_secret_key = var.payment_secret_key
+    eureka_host        = aws_instance.eureka-instance.private_ip
   }
 }
 

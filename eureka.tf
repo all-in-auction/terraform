@@ -1,6 +1,6 @@
 resource "aws_instance" "eureka-instance" {
   ami           = "ami-02c329a4b4aba6a48"
-  instance_type = "t3.small"
+  instance_type = "t2.micro"
   key_name      = "auction_key"
 
   tags = {
@@ -30,4 +30,13 @@ resource "aws_security_group_rule" "allow_ecs_to_eureka" {
   protocol          = "tcp"
   security_group_id = aws_security_group.eureka_sg.id 
   source_security_group_id = aws_security_group.ecs_tasks.id
+}
+
+resource "aws_security_group_rule" "allow_tcp_to_eureka" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  security_group_id = aws_security_group.eureka_sg.id 
+  cidr_blocks = ["0.0.0.0/0"]
 }
