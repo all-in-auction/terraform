@@ -127,3 +127,12 @@ resource "aws_security_group_rule" "allow_pmysql_to_ecs" {
   security_group_id = aws_security_group.ecs_tasks.id
   source_security_group_id = aws_security_group.point_mysql_sg.id
 }
+
+resource "aws_security_group_rule" "allow_eureka_to_ecs" {
+  type              = "ingress"
+  from_port         = 8761
+  to_port           = 8761
+  protocol          = "tcp"
+  security_group_id = aws_security_group.ecs_tasks.id
+  source_security_group_id = aws_security_group.eureka_sg.id
+}

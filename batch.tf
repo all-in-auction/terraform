@@ -58,3 +58,12 @@ resource "aws_security_group_rule" "allow_mysql_to_batch" {
   security_group_id        = aws_security_group.batch_sg.id 
   source_security_group_id = aws_security_group.mysql_sg.id    
 }
+
+resource "aws_security_group_rule" "allow_eureka_to_batch" {
+  type                     = "ingress"
+  from_port                = 8761
+  to_port                  = 8761
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.batch_sg.id 
+  source_security_group_id = aws_security_group.eureka_sg.id    
+}
