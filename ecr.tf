@@ -34,6 +34,15 @@ resource "aws_ecr_repository" "eureka_repo" {
   }
 }
 
+resource "aws_ecr_repository" "gateway_repo" {
+  name = "service-gateway-${var.env_suffix}"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = false
+  }
+}
+
 resource "aws_ecr_lifecycle_policy" "repo-policy" {
   repository = aws_ecr_repository.repo.name
 

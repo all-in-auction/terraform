@@ -27,7 +27,7 @@ resource "aws_lb_target_group" "staging" {
   name                  = "service-alb-tg-${var.env_suffix}"
   port                  = 8080
   protocol              = "HTTP"
-  target_type           = "ip"
+  target_type           = "instance"
   deregistration_delay  = 30
 
   health_check {

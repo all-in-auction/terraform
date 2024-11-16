@@ -50,6 +50,7 @@ data "template_file" "service" {
     elasticsearch_password = var.elasticsearch_password
     master_db_pw       = var.master_db_pw
     slave_db_pw        = var.slave_db_pw
+    eureka_host        = aws_instance.eureka-instance.private_ip
   }
 }
 

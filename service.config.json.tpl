@@ -107,6 +107,10 @@
       {
         "name": "KAFKA_HOSTS",
         "value": "${kafka_host}:19092, ${kafka_host}:19093, ${kafka_host}:19094"
+      },
+      {
+        "name": "EUREKA_HOST",
+        "value": "${eureka_host}"
       }
     ],
     "ulimits": [
