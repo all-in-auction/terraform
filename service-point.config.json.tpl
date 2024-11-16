@@ -23,6 +23,26 @@
       {
         "name": "PORT",
         "value": "${host_port}"
+      },
+      {
+        "name": "PROD_DB_URL",
+        "value": "${point_mysql_host}"
+      },
+      {
+        "name": "PROD_DB_PASSWORD",
+        "value": "${point_mysql_password}"
+      },
+      {
+        "name": "PAYMENT_CLIENT_KEY",
+        "value": "${payment_client_key}"
+      },
+      {
+        "name": "PAYMENT_SECRET_KEY",
+        "value": "${payment_secret_key}"
+      },
+      {
+        "name": "SPRING_PROFILES_ACTIVE",
+        "value": "prod"
       }
     ],
     "ulimits": [

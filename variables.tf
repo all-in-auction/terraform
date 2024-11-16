@@ -91,3 +91,15 @@ variable "payment_client_key" {
 variable "payment_secret_key" {
   type = string
 }
+
+variable "master_db_pw" {
+  type = string
+}
+
+variable "slave_db_pw" {
+  type = string
+}
+
+variable "point_db_pw" {
+  type = string
+}

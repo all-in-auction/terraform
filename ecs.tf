@@ -48,6 +48,8 @@ data "template_file" "service" {
     elasticsearch_host = aws_instance.monitoring-instance.private_ip
     elasticsearch_username = var.elasticsearch_username
     elasticsearch_password = var.elasticsearch_password
+    master_db_pw       = var.master_db_pw
+    slave_db_pw        = var.slave_db_pw
   }
 }
 
@@ -62,6 +64,10 @@ data "template_file" "service_point" {
     host_port          = 8080
     app_name           = var.app_name
     env_suffix         = var.env_suffix
+    point_mysql_host   = aws_instance.point-mysql-instance.private_ip
+    point_mysql_password = var.point_db_pw
+    payment_client_key = var.payment_client_key
+    payment_secret_key = var.payment_secret_key
   }
 }
 

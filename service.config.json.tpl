@@ -82,11 +82,11 @@
       },
       {
         "name": "MASTER_DB_PW",
-        "value": "1234"
+        "value": "${master_db_pw}"
       },
       {
         "name": "SLAVE_DB_PW",
-        "value": "1234"
+        "value": "${slave_db_pw}"
       },
       {
         "name": "ELASTICSEARCH_URIS",
