@@ -25,6 +25,15 @@ resource "aws_ecr_repository" "batch_repo" {
   }
 }
 
+resource "aws_ecr_repository" "eureka_repo" {
+  name = "service-eureka-${var.env_suffix}"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = false
+  }
+}
+
 resource "aws_ecr_lifecycle_policy" "repo-policy" {
   repository = aws_ecr_repository.repo.name
 
