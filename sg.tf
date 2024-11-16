@@ -118,3 +118,12 @@ resource "aws_security_group_rule" "allow_monitoring_es_to_ecs" {
   security_group_id = aws_security_group.ecs_tasks.id
   source_security_group_id = aws_security_group.monitoring_sg.id
 }
+
+resource "aws_security_group_rule" "allow_pmysql_to_ecs" {
+  type              = "ingress"
+  from_port         = 3306
+  to_port           = 3306
+  protocol          = "tcp"
+  security_group_id = aws_security_group.ecs_tasks.id
+  source_security_group_id = aws_security_group.point_mysql_sg.id
+}

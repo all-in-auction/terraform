@@ -69,8 +69,8 @@ resource "aws_ecs_task_definition" "service" {
   family                   = "service-staging-${var.env_suffix}"
   network_mode             = "awsvpc"
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
-  cpu                      = 256
-  memory                   = 512
+  cpu                      = 512
+  memory                   = 1024
   requires_compatibilities = ["FARGATE"]
   container_definitions    = data.template_file.service.rendered
 
@@ -103,7 +103,7 @@ resource "aws_ecs_service" "staging" {
   name                  = "staging"
   cluster               = aws_ecs_cluster.staging.id
   task_definition       = aws_ecs_task_definition.service.arn
-  desired_count         = length(data.aws_availability_zones.available.names)
+  desired_count         = 2
   force_new_deployment  = true
   launch_type           = "FARGATE"
 
@@ -134,7 +134,7 @@ resource "aws_ecs_service" "staging_point" {
   name                  = "staging-point"
   cluster               = aws_ecs_cluster.staging.id
   task_definition       = aws_ecs_task_definition.service_point.arn
-  desired_count         = length(data.aws_availability_zones.available.names)
+  desired_count         = 2
   force_new_deployment  = true
   launch_type           = "FARGATE"
 
