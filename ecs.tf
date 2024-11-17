@@ -70,6 +70,7 @@ data "template_file" "service_point" {
     payment_client_key = var.payment_client_key
     payment_secret_key = var.payment_secret_key
     eureka_host        = aws_instance.eureka-instance.private_ip
+    logstash_host      = aws_instance.monitoring-instance.private_ip
   }
 }
 
@@ -121,12 +122,6 @@ resource "aws_ecs_service" "staging" {
     assign_public_ip = false
   }
 
-  load_balancer {
-    target_group_arn = aws_lb_target_group.staging.arn
-    container_name   = var.app_name
-    container_port   = var.container_port
-  }
-
   depends_on = [
     aws_lb_listener.http_forward,
     aws_iam_role_policy_attachment.ecs_task_execution_role,
@@ -150,12 +145,6 @@ resource "aws_ecs_service" "staging_point" {
     security_groups  = [aws_security_group.ecs_tasks.id]
     subnets          = aws_subnet.private.*.id
     assign_public_ip = false
-  }
-
-  load_balancer {
-    target_group_arn = aws_lb_target_group.staging.arn
-    container_name   = var.app_name
-    container_port   = var.container_port
   }
 
   depends_on = [

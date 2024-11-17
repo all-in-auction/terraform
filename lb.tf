@@ -24,10 +24,10 @@ resource "aws_lb_listener" "http_forward" {
 
 resource "aws_lb_target_group" "staging" {
   vpc_id                = aws_vpc.cluster_vpc.id
-  name                  = "service-alb-tg-${var.env_suffix}"
+  name                  = "service-alb-tg-gateway"
   port                  = 8080
   protocol              = "HTTP"
-  target_type           = "ip"
+  target_type           = "instance"
   deregistration_delay  = 30
 
   health_check {
@@ -82,18 +82,21 @@ resource "aws_lb_target_group" "internal_service" {
   }
 }
 
-resource "aws_lb_listener" "internal_http_forward" {
-  load_balancer_arn = aws_alb.internal_staging.id
-  port              = 80
-  protocol          = "HTTP"
+resource "aws_lb_target_group" "internal_service_point" {
+  vpc_id      = aws_vpc.cluster_vpc.id
+  name        = "ecs-internal-service-point-tg"
+  port        = 8080
+  protocol    = "HTTP"
+  target_type = "ip"
 
-  default_action {
-    type = "fixed-response"
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "Not Found"
-      status_code  = "404"
-    }
+  health_check {
+    protocol            = "HTTP"
+    interval            = 30
+    timeout             = 5
+    path                = "/actuator/health"
+    matcher             = "200-299"
+    healthy_threshold   = 3
+    unhealthy_threshold = 2
   }
 
   tags = {
@@ -102,13 +105,45 @@ resource "aws_lb_listener" "internal_http_forward" {
   }
 }
 
+resource "aws_lb_listener" "internal_http_forward" {
+  load_balancer_arn = aws_alb.internal_staging.id
+  port              = 8080
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.internal_service.arn
+  }
+
+  tags = {
+    Environment = var.env_suffix
+    Application = var.app_name
+  }
+}
+
+resource "aws_lb_listener_rule" "service_point_rule" {
+  listener_arn = aws_lb_listener.internal_http_forward.arn
+  priority     = 10
+
+  condition {
+    path_pattern {
+      values = ["/api/internal/*"] 
+    }
+  }
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.internal_service_point.arn
+  }
+}
+
 resource "aws_security_group" "internal_lb" {
   vpc_id = aws_vpc.cluster_vpc.id
   name   = "internal-lb-sg"
 
   ingress {
-    from_port   = 80
-    to_port     = 80
+    from_port   = 8080
+    to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["10.30.0.0/16"]
   }

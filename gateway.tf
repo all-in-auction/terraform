@@ -19,6 +19,12 @@ resource "aws_instance" "gateway-instance" {
   subnet_id = aws_subnet.public[0].id
 }
 
+resource "aws_lb_target_group_attachment" "gateway_tg" {
+  target_group_arn = aws_lb_target_group.staging.arn
+  target_id        = aws_instance.gateway-instance.id
+  port             = 8080
+}
+
 resource "aws_security_group" "gateway_sg" {
   name        = "gateway-sg"
   vpc_id      = aws_vpc.cluster_vpc.id

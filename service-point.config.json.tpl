@@ -51,6 +51,14 @@
       {
         "name": "ECS_CONTAINER_METADATA_URI_V4",
         "value": ""
+      },
+      {
+        "name": "LOGSTASH_HOST",
+        "value": "${logstash_host}"
+      },
+      {
+        "name": "LOGSTASH_PORT",
+        "value": "5044"
       }
     ],
     "ulimits": [
