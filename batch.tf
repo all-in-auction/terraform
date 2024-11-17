@@ -14,13 +14,15 @@ resource "aws_instance" "batch-instance" {
 resource "aws_security_group" "batch_sg" {
   name        = "batch-sg"
   vpc_id      = aws_vpc.cluster_vpc.id
+}
 
-  egress {
-    from_port     = 0
-    to_port       = 0
-    protocol      = "-1"
-    cidr_blocks   = ["0.0.0.0/0"]
-  }
+resource "aws_security_group_rule" "egress_rule_batch" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  security_group_id = aws_security_group.batch_sg.id 
+  cidr_blocks = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "allow_redis_to_batch" {

@@ -82,29 +82,6 @@ resource "aws_lb_target_group" "internal_service" {
   }
 }
 
-resource "aws_lb_target_group" "internal_service_point" {
-  vpc_id      = aws_vpc.cluster_vpc.id
-  name        = "ecs-internal-service-point-tg"
-  port        = 8080
-  protocol    = "HTTP"
-  target_type = "ip"
-
-  health_check {
-    protocol            = "HTTP"
-    interval            = 30
-    timeout             = 5
-    path                = "/health"
-    matcher             = "200-299"
-    healthy_threshold   = 3
-    unhealthy_threshold = 2
-  }
-
-  tags = {
-    Environment = var.env_suffix
-    Application = var.app_name
-  }
-}
-
 resource "aws_lb_listener" "internal_http_forward" {
   load_balancer_arn = aws_alb.internal_staging.id
   port              = 80

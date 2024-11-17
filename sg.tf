@@ -22,20 +22,24 @@ resource "aws_security_group" "lb" {
 resource "aws_security_group" "ecs_tasks" {
   vpc_id = aws_vpc.cluster_vpc.id
   name = "ecs-tasks-sg-${var.env_suffix}"
+}
 
-  ingress {
-    from_port       = 8080
-    protocol        = "tcp"
-    to_port         = 8080
-    cidr_blocks     = ["0.0.0.0/0"]
-  }
+resource "aws_security_group_rule" "egress_rule_ecs" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  security_group_id = aws_security_group.ecs_tasks.id 
+  cidr_blocks       = ["0.0.0.0/0"]
+}
 
-  egress {
-    from_port     = 0
-    protocol      = "-1"
-    to_port       = 0
-    cidr_blocks   = ["0.0.0.0/0"]
-  }
+resource "aws_security_group_rule" "allow_tcp_to_ecs" {
+  type              = "ingress"
+  from_port         = 8080
+  to_port           = 8080
+  protocol          = "tcp"
+  security_group_id = aws_security_group.ecs_tasks.id
+  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "allow_redis_to_ecs" {

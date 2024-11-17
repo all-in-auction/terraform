@@ -14,13 +14,15 @@ resource "aws_instance" "eureka-instance" {
 resource "aws_security_group" "eureka_sg" {
   name        = "eureka-sg"
   vpc_id      = aws_vpc.cluster_vpc.id
+}
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+resource "aws_security_group_rule" "egress_rule_eureka" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  security_group_id = aws_security_group.eureka_sg.id 
+  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "allow_ecs_to_eureka" {
@@ -47,5 +49,14 @@ resource "aws_security_group_rule" "allow_tcp_to_eureka" {
   to_port           = 22
   protocol          = "tcp"
   security_group_id = aws_security_group.eureka_sg.id 
-  cidr_blocks = ["0.0.0.0/0"]
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "allow_dashboard_to_eureka" {
+  type              = "ingress"
+  from_port         = 8761
+  to_port           = 8761
+  protocol          = "tcp"
+  security_group_id = aws_security_group.eureka_sg.id 
+  cidr_blocks       = ["0.0.0.0/0"]
 }
