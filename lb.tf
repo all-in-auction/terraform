@@ -27,14 +27,14 @@ resource "aws_lb_target_group" "staging" {
   name                  = "service-alb-tg-${var.env_suffix}"
   port                  = 8080
   protocol              = "HTTP"
-  target_type           = "instance"
+  target_type           = "ip"
   deregistration_delay  = 30
 
   health_check {
     protocol            = "HTTP"
     interval            = 120
     port                = "8080"
-    path                = "/actuator/health"
+    path                = "/health"
     timeout             = 60
     matcher             = "200"
     healthy_threshold   = 5
@@ -93,7 +93,7 @@ resource "aws_lb_target_group" "internal_service_point" {
     protocol            = "HTTP"
     interval            = 30
     timeout             = 5
-    path                = "/actuator/health"
+    path                = "/health"
     matcher             = "200-299"
     healthy_threshold   = 3
     unhealthy_threshold = 2

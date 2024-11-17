@@ -1,10 +1,15 @@
 resource "aws_instance" "gateway-instance" {
   ami           = "ami-02c329a4b4aba6a48"
-  instance_type = "t2.micro"
+  instance_type = "t3.small"
   key_name      = "auction_key"
 
   tags = {
     Name = "gateway-instance"
+  }
+
+  root_block_device {
+    volume_size = 16
+    volume_type = "gp3"
   }
 
    user_data = <<-EOF
@@ -20,7 +25,7 @@ resource "aws_instance" "gateway-instance" {
 }
 
 resource "aws_security_group" "gateway_sg" {
-  name        = "kafka-sg"
+  name        = "gateway-sg"
   vpc_id      = aws_vpc.cluster_vpc.id
 
   ingress {
@@ -28,6 +33,14 @@ resource "aws_security_group" "gateway_sg" {
     to_port     = 8080
     protocol    = "tcp"
     security_groups = [aws_security_group.lb.id]
+  }
+
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    security_groups = [aws_security_group.lb.id]
+    cidr_blocks   = ["10.30.0.0/16"]
   }
 
   egress {
@@ -38,3 +51,11 @@ resource "aws_security_group" "gateway_sg" {
   }
 }
 
+resource "aws_security_group_rule" "allow_tcp_to_gateway" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  security_group_id = aws_security_group.gateway_sg.id 
+  cidr_blocks = ["0.0.0.0/0"]
+}

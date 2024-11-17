@@ -32,6 +32,15 @@ resource "aws_security_group_rule" "allow_ecs_to_eureka" {
   source_security_group_id = aws_security_group.ecs_tasks.id
 }
 
+resource "aws_security_group_rule" "allow_gateway_to_eureka" {
+  type              = "ingress"
+  from_port         = 8761
+  to_port           = 8761
+  protocol          = "tcp"
+  security_group_id = aws_security_group.eureka_sg.id 
+  source_security_group_id = aws_security_group.gateway_sg.id
+}
+
 resource "aws_security_group_rule" "allow_tcp_to_eureka" {
   type              = "ingress"
   from_port         = 22

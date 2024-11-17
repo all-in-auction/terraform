@@ -111,6 +111,10 @@
       {
         "name": "EUREKA_HOST",
         "value": "${eureka_host}"
+      },
+      {
+        "name": "ECS_CONTAINER_METADATA_URI_V4",
+        "value": ""
       }
     ],
     "ulimits": [
