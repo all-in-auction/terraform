@@ -34,7 +34,7 @@ resource "aws_lb_target_group" "staging" {
     protocol            = "HTTP"
     interval            = 120
     port                = "8080"
-    path                = "/health"
+    path                = "/actuator/health"
     timeout             = 60
     matcher             = "200"
     healthy_threshold   = 5
