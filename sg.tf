@@ -39,7 +39,16 @@ resource "aws_security_group_rule" "allow_tcp_to_ecs" {
   to_port           = 8080
   protocol          = "tcp"
   security_group_id = aws_security_group.ecs_tasks.id
-  cidr_blocks       = ["0.0.0.0/0"]
+  source_security_group_id = aws_security_group.ecs_tasks.id
+}
+
+resource "aws_security_group_rule" "allow_gRPC_to_ecs" {
+  type              = "ingress"
+  from_port         = 8085
+  to_port           = 8085
+  protocol          = "tcp"
+  security_group_id = aws_security_group.ecs_tasks.id
+  source_security_group_id = aws_security_group.ecs_tasks.id
 }
 
 resource "aws_security_group_rule" "allow_redis_to_ecs" {
